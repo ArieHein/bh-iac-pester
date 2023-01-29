@@ -1,0 +1,7 @@
+{
+    "SubscriptionName" : "Enter Subscription Name",
+    "ResourceName" : "Enter Resource Name",
+    "ResourceLocation" : "Enter Resource Location",
+    "EnvironmentName" : "Enter Environment Name",
+    "ProjectName" : "Enter Project Name"
+}
