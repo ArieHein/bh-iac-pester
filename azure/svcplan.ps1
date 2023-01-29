@@ -82,13 +82,13 @@ Describe "Azure Service Plan" {
         # Validate Service Plan Tags
         It "Service Plan should have all Resource Tags" {
             $ResourceFound = $false
-            $Message = "Resource is"
+            $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys
             if ( -not ($CompareKeys)) {
                 $CompareValues = Compare-Object -ReferenceObject $Resource.Tags.Values -DifferenceObject $ResourceTags.Values
                 if ( -not ($CompareValues)) {
                     $ResourceFound = $true
-                    $Message = $Message + " Found."
+                    $Message = $Message + " is Found."
                 }
                 else {
                     $Message = $Message + " is not found. Keys equal, Values are not."
