@@ -33,80 +33,60 @@ Describe "Azure SQL Database" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the SQL DBs in the ResourceGroup
+        # Get all the SQL Databasess in the Resource Group and SQL Server
         $Resources = Get-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ResourceServerName
 
-        It "SQL Database should exist in expected SQL Server" {
+        It "SQL Database should exist in the expected Resource Group and SQL Server" {
             $ResourceFound = $false
 
-            foreach ($Resource in $Resources) {
-                if ($Resource.Name -eq $ResourceName) {
+            $Resources | ForEach-Object {
+                if (_$.Name -eq $ResourceName) {
                     $ResourceFound = $true
+                    break
                 }
             }
             $ResourceFound | Should -Be $true
         }
 
-        # Get specific SQLDB
-        $Resource = Get-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ResourceServerName -DatabaseName $ResourceName
+        # Get specific SQL Database
+        $Resource = Get-AzSqlDatabase -DatabaseName $ResourceName -ResourceGroupName $ResourceGroupName -ServerName $ResourceServerName
 
-        # Check SQLDatabase is in the desired Location
-        It 'Should be in Location' {
-            $Resource.Location | Should -Be $SQLDatabaseLocation
+        It "SQL Database should be in expected Location" {
+            $Resource.Location | Should -Be $ResourceLocation
         }
 
-        # Check SQLDatabase is in desrired Edition
-        It 'Should have desired Edition' {
-            $Resource.Edition | Should -Be $SQLDatabaseEdition
+        It "SQL Database should have the expected Collation setting" {
+            $Resource.CollationName | Should -Be $ResourceCollation
         }
 
-        # Check SQLDatabase is of desired Family
-        It 'Should be desired SQL Database family' {
-            $Resource.Family | Should -Be $SQLDatabaseFamily
-        }
-
-        # Check SQLDatabase is of desired Collation
-        It 'Should be desired SQL Database family' {
-            $Resource.CollationName | Should -Be $SQLDatabaseCollation
-        }
-
-        it "Should have expected SQL Database Name" {
-            $Resource.Name | Should -Be $ResourceName
-        }
-
-        it "Should have expected SQL Database Capacity" {
+        it "SQL Database should have the expected Capacity setting" {
             $Resource.Capacity | Should -Be $ResourceCapacity
         }
 
-        it "Should be exepcted SQL Database Family" {
-            $Resource.Family | Should -Be $ResourceFamily
-        }
-
-        it "Should be expected SQL Database Edition" {
+        it "SQL Database should be of the expected Edition" {
             $Resource.Edition | Should -Be $ResourceEdition
         }
 
-        it "Shold be expected SQL Database Max Size" {
+        it "SQL Database shold have the expected Max Size setting" {
             $Resource.MaxSizeByte  | Should -Be $ResourceMaxSize # 1073741824
         }
 
-        # Validate SQLDB Tags
-
+        It "SQL Database should have all the expected Resource Tags" {
+        }
     }
 
     Context "Resource Operation" {
         # Get specific SQL Database
-        $Resource = Get-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ResourceServerName -DatabaseName $ResourceName
+        $Resource = Get-AzSqlDatabase -DatabaseName $ResourceName -ResourceGroupName $ResourceGroupName -ServerName $ResourceServerName
 
-        # Check SQL Database is in desired Status
-        It 'Should be in expected SQL Database status' {
-            $Resource.Status | Should Be "Online"
+        It "SQL Database should be in expected status" {
+            $Resource.Status | Should -Be "Online"
         }
     }
 
