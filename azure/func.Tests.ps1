@@ -3,10 +3,11 @@ param (
     [Parameter(Mandatory)][string]$ResourceName,
     [Parameter(Mandatory)][string]$ResourceGroupName,
     [Parameter(Mandatory)][string]$ResourceLocation,
+    [Parameter(Mandatory)][string]$ResourceFuncType,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
-Describe "Azure Linux Function App" {
+Describe "Azure Function App" {
 
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
@@ -24,16 +25,16 @@ Describe "Azure Linux Function App" {
 
         foreach ($ResourceGroup in $ResourceGroups) {
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the Linux Function Apps in the ResourceGroup
+        # Get all the Function Apps in the Resource Group
         $Resources = Get-AzFunctionApp -ResourceGroupName $ResourceGroupName
         
-        It "FuncApp should exist in Resource Group" {
+        It "Function App should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             foreach ($Resource in $Resources) {
@@ -44,14 +45,11 @@ Describe "Azure Linux Function App" {
             $ResourceFound | Should -Be $true
         }
 
-        # Get specific Linux FunctionApp
+        # Get specific Function App
         $Resource = Get-AzFunctionApp -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "FuncApp should be" {
-
+        It "Function App should have all the expected Resource Tags" {
         }
-
-        ## Validate FunctionApp Tags
     }
 
     Context "Resource Operation" {

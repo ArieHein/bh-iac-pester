@@ -6,10 +6,12 @@ param (
     [Parameter(Mandatory)][string]$ResourceKind,
     [Parameter(Mandatory)][string]$ResourceSKU,
     [Parameter(Mandatory)][string]$ResourceURI,
+    [Parameter(Mandatory)][string]$ResourceAppType,
+    [Parameter(Mandatory)][string]$ResourceVersion,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
-Describe "Azure Linux Web App" {
+Describe "Azure App Service" {
 
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
@@ -27,16 +29,16 @@ Describe "Azure Linux Web App" {
 
         foreach ($ResourceGroup in $ResourceGroups) {
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all linux Web Apps in the ResourceGroup
+        # Get all the App Services in the Resource Group
         $Resources = Get-AzAppService -ResourceGroupName $ResourceGroupName
 
-        It "AppService should exist in Resource Group" {
+        It "App Service should exist in the expected Resource Group" {
             $ResourceFound = $false
             foreach ($Resource in $Resources) {
                 if ($Resource.Name -eq $ResourceName) {
@@ -46,18 +48,18 @@ Describe "Azure Linux Web App" {
             $ResourceFound | Should -Be $true
         }
 
-        # Get specific linux Web App
+        # Get specific App Service
         $Resource = Get-AzAppService -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "AppService should be of expected Kind" {
+        It "App Service should be of the expected Kind" {
             $Resource.Kind | Should -Be $ResourceKind
         }
 
-        It "AppService is of the expected SKU" {
+        It "App Service should be of the expected SKU" {
             $Resource.SkuName | Should -Be $ResourceSKU
         }
 
-        It "AppService should have all Resource Tags" {
+        It "App Service should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys
@@ -79,31 +81,27 @@ Describe "Azure Linux Web App" {
     }
 
     Context "Resource Operation" {
-        # Get specific linux Web App
+        # Get specific App Service
         $Resource = Get-AzAppService -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        # Check if App Service is Enabled
-        It 'Should be Enabled' {
-            $Resource.Enabled | Should Be "True"
+        It "App Service should be Enabled" {
+            $Resource.Enabled | Should -Be "True"
         }
 
-        # Check if App Service is in Running state
-        It 'Should be Running State' {
-            $Resource.State | Should Be "Running"
+        It "App Service should be in Running State" {
+            $Resource.State | Should -Be "Running"
         }
 
-        # Check App Service is listening to requests
-        It "AppService should be active" {
+        It "App Service should be Active and Listening to Requests" {
             $ResourceActive = Invoke-WebRequest -Uri $ResourceURI
-            $ResourceActive | Should -Be "200"
+            $ResourceActive.StatusCode | Should -Be "200"
         }
 
-        # Check App Service Version returns desired version
-        It 'Should return desired version' {
+        It "App Service should return the expected version" {
             $AppURL = (Get-AzWebApp -ResourceGroupName $ResourceGroupName -Name $AppServiceName).DefaultHostName
             $AppRespond = Invoke-WebRequest -Uri $AppURL/Version
             # TO DO: Check the respose type to extract the version and replace the version property
-            $AppRespond.Version | Should Be $AppVersion 
+            $AppRespond.Version | Should -Be $ResourceVersion
         }
     }
 
