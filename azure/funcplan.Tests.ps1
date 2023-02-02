@@ -3,8 +3,9 @@ param (
     [Parameter(Mandatory)][string]$ResourceName,
     [Parameter(Mandatory)][string]$ResourceGroupName,
     [Parameter(Mandatory)][string]$ResourceLocation,
-    [Parameter(Mandatory)][string]$ResourceWorker,
-    [Parameter(Mandatory)][string]$ResourceSKUName,
+    [Parameter(Mandatory)][string]$ResourceWorkerType,
+    [Parameter(Mandatory)][string]$ResourceSKU,
+    [Parameter(Mandatory)][string]$ResourceStatus,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
@@ -40,9 +41,10 @@ Describe "Azure Function App Plan" {
         It "FuncAppPlan should exist in Resource Group" {
             $ResourceFound = $false
 
-            foreach ($Resource in $Resources) {
-                if ($Resource.Name -eq $ResourceName) {
+            $Resources | ForEach-Object {
+                if (_$.Name -eq $ResourceName) {
                     $ResourceFound = $true
+                    break
                 }
             }
             $ResourceFound | Should -Be $true
@@ -51,20 +53,16 @@ Describe "Azure Function App Plan" {
         # Get specific Function App Plan
         $Resource = Get-AzFunctionAppPlan -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "FuncAppPlan should have expected Kind" {
-
+        It "FuncAppPlan should be in expected Location" {
+            $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "FuncAppPlan should have expected Tier" {
-
+        It "FuncAppPlan should have expected SKU" {
+            $Resources.SkuName | Should -Be $ResourceSKU
         }
 
-        It "FuncAppPlan should have expected Size" {
-
-        }
-
-        It "FuncAppPlan should have expected Capacity" {
-
+        It "FuncAppPlan should have expected Worker Type" {
+            $Resource.Worker | Should -Be $ResourceWorkerType
         }
 
         # Validate FunAppPlan Tags
@@ -72,6 +70,17 @@ Describe "Azure Function App Plan" {
     }
 
     Context "Resource Operation" {
+         # Get specific Function App Plan
+        $Resource = Get-AzContainerRegistry -Name $ResourceName -ResourceGroupName $ResourceGroupName
+    
+        It "FuncAppPlan should be provisioned successfully" {
+            $Resource.ProvisioningState | Should -Be "Succeeded"
+        }
+
+        It "FuncAppPlan should be at expected state" {
+            $Resource.Status | Should -Be $ResourceStatus
+        }
+
     }
 
     AfterAll {
