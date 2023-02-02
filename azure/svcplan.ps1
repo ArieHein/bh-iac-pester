@@ -43,9 +43,10 @@ Describe "Azure Service Plan" {
         It "Service Plan should exist in the expected Resource Group" {
             $ResourceFound = $false
 
-            foreach ($Resource in $Resources) {
-                if ($Resource.Name -eq $ResourceName) {
+            $Resources | ForEach-Object {
+                if (_$.Name -eq $ResourceName) {
                     $ResourceFound = $true
+                    break
                 }
             }
             $ResourceFound | Should -Be $true
