@@ -4,12 +4,10 @@ param (
     [Parameter(Mandatory)][string]$ResourceGroupName,
     [Parameter(Mandatory)][string]$ResourceLocation,
     [Parameter(Mandatory)][string]$ResourceSKU,
-    [Parameter(Mandatory)][bool]$ResourceDeploy,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
 Describe "Azure Key Vault" {
-
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {
@@ -44,18 +42,18 @@ Describe "Azure Key Vault" {
                     break
                 }
             }
-            $ResourceFound | Should -be $true
+            $ResourceFound | Should -Be $true
         }
 
         # Get specific Key Vault
         $Resource = Get-AzKeyVault -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "KeyVault should be of expected SKU" {
-            $Resource.Sku | Should -Be $ResourceSKU
+        It "KeyVault should be in expected Location" {
+            $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "KeyVault should have expected Enabeld for Deployment setting" {
-            $Resource.EnabledForDeployment | Should -Be $ResourceDeploy
+        It "KeyVault should be of the expected SKU" {
+            $Resource.Sku | Should -Be $ResourceSKU
         }
 
         # Validate Key Vault Tags
