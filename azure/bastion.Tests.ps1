@@ -72,6 +72,12 @@ Describe "Azure Bastion" {
     }
 
     Context "Resource Operation" {
+        # Get specific Bastion
+        $Resource = Get-AzBastion -Name $ResourceName -ResourceGroupName $ResourceGroupName
+
+        It "Bastion should be provisioned successfully" {
+            $Resource.ProvisioningState | Should -Be "Succeeded"
+        }
     }
 
     AfterAll {
