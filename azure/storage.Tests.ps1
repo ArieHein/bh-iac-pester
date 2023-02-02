@@ -34,7 +34,7 @@ Describe "Azure Storage Account" {
     }
 
     Context "Resource Provision" {
-        # Get all the Storage Accouts in the Resource Group
+        # Get all the Storage Accounts in the Resource Group
         $Resources = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName
 
         It "Storage Account should exist in the expected Resource Group" {
