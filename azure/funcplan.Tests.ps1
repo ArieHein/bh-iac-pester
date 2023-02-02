@@ -9,7 +9,7 @@ param (
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
-Describe "Azure Function App Plan" {
+Describe "Azure FunctionApp Plan" {
 
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
@@ -29,16 +29,16 @@ Describe "Azure Function App Plan" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the Function App Plans in the ResourceGroup
+        # Get all the Function App Plans in the Resource Group
         $Resources = Get-AzFunctionAppPlan -ResourceGroupName $ResourceGroupName
 
-        It "FuncAppPlan should exist in Resource Group" {
+        It "Function App Plan should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             $Resources | ForEach-Object {
@@ -53,34 +53,33 @@ Describe "Azure Function App Plan" {
         # Get specific Function App Plan
         $Resource = Get-AzFunctionAppPlan -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "FuncAppPlan should be in expected Location" {
+        It "Function App Plan should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "FuncAppPlan should have expected SKU" {
+        It "Function App Plan should be of the expected SKU" {
             $Resources.SkuName | Should -Be $ResourceSKU
         }
 
-        It "FuncAppPlan should have expected Worker Type" {
+        It "Function App Plan should be of the expected Worker Type" {
             $Resource.Worker | Should -Be $ResourceWorkerType
         }
 
-        # Validate FunAppPlan Tags
-
+        It "Function App Plan should have all the expected Resource Tags" {
+        }
     }
 
     Context "Resource Operation" {
          # Get specific Function App Plan
         $Resource = Get-AzContainerRegistry -Name $ResourceName -ResourceGroupName $ResourceGroupName
     
-        It "FuncAppPlan should be provisioned successfully" {
+        It "Function App Plan should be provisioned successfully" {
             $Resource.ProvisioningState | Should -Be "Succeeded"
         }
 
-        It "FuncAppPlan should be at expected state" {
+        It "Function App Plan should be at expected state" {
             $Resource.Status | Should -Be $ResourceStatus
         }
-
     }
 
     AfterAll {

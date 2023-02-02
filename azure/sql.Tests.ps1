@@ -8,8 +8,6 @@ param (
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
-# Potentially add a way to test login with user name and password taken from keyvault
-
 Describe "Azure SQL Server" {
 
     BeforeAll {
@@ -28,16 +26,16 @@ Describe "Azure SQL Server" {
 
         foreach ($ResourceGroup in $ResourceGroups) {
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the SQLServers in the ResourceGroup
+        # Get all the SQL Servers in the Resource Group
         $Resources = Get-AzSqlServer -ResourceGroupName $ResourceGroupName
 
-        It "SQLServer should exist in Resource Group" {
+        It "SQL Server should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             foreach ($Resource in $Resources) {
@@ -48,24 +46,23 @@ Describe "Azure SQL Server" {
             $ResourceFound | Should -Be $true
         }
 
-        # Get specific SQLServer
+        # Get specific SQL Server
         $Resource = Get-AzSqlServer -ServerName $ResourceName -ResourceGroupName $ResourceGroupName
 
-        # Check SQLServer is in the desired location
-        It 'SQLServer should be in expected Location' {
+        It "SQL Server should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        # Check SQL Server Version
-        It "SQLServer should be of expected Version" {
+        It "SQL Server should be of expected Version" {
             $Resource.ServerVersion | Should -Be $ResourceVersion
         }
 
-        # Validate SQLServer Tags
+        It "SQL Server should have all the expected Resource Tags" {
+        }
     }
 
     Context "Resource Operation" {
-        # Get specific SQLServer
+        # Get specific SQL Server
         $Resource = Get-AzSqlServer -ServerName $ResourceName -ResourceGroupName $ResourceGroupName
 
         # Check SQLServer is active
@@ -76,13 +73,10 @@ Describe "Azure SQL Server" {
         # to the master db. There isnt even a need to run a query. One thing to think is how
         # to connect from agent doing the tests, as it require adding IP to the SQL FW Rules
         # can always try adding, testing and removing ot perhaps if it record this as
-        # an azure service and 0.0.0.0 already appears in the sql fw rules but ofc only if it comes
-        # from Azure DevOps.
-
+        # an azure service and 0.0.0.0 already appears in the sql fw rules but ofc only if
+        # it comes from Azure DevOps.
     }
 
-        # Think about adding test to actually connect to test connection string
-
-        AfterAll {
+    AfterAll {
     }
 }

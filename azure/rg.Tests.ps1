@@ -28,7 +28,7 @@ Describe "Azure Resource Group" {
         # Get all the Resource Groups in the Subscription
         $Resources = Get-AzResourceGroup -Subscription $SubscriptionName
 
-        It "Resource Group should exist in the Subscription" {
+        It "Resource Group should exist in the expected Subscription" {
             $ResourceFound = $false
 
             $Resources | ForEach-Object {
@@ -43,11 +43,11 @@ Describe "Azure Resource Group" {
         # Get specific Resource Group
         $Resource = Get-AzResourceGroup -Name $ResourceName -Subscription $SubscriptionName
 
-        It "Resource Group should be in Location" {
+        It "Resource Group should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "Resource Group should have expected Resource Tags" {
+        It "Resource Group should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys

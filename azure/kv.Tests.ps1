@@ -24,16 +24,16 @@ Describe "Azure Key Vault" {
 
         foreach ($ResourceGroup in $ResourceGroups) {
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the Key Vaults in the ResourceGroup
+        # Get all the Key Vaults in the Resource Group
         $Resources = Get-AzKeyVault -ResourceGroupName $ResourceGroupName
 
-        It "KeyVault should exist in Resource Group" {
+        It "Key Vault should exist in the Resource Group" {
             $ResourceFound = $false
 
             $Resources | ForEach-Object {
@@ -48,16 +48,16 @@ Describe "Azure Key Vault" {
         # Get specific Key Vault
         $Resource = Get-AzKeyVault -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "KeyVault should be in expected Location" {
+        It "Key Vault should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "KeyVault should be of the expected SKU" {
+        It "Key Vault should be of the expected SKU" {
             $Resource.Sku | Should -Be $ResourceSKU
         }
 
-        # Validate Key Vault Tags
-
+        It "Key Vault should have all the expected Resource Tags" {
+        }
     }
 
     Context "Resource Operation" {

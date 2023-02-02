@@ -25,16 +25,16 @@ Describe "Azure Bastion" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the Bastions in the ResourceGroup
+        # Get all the Bastions in the Resource Group
         $Resources = Get-AzBastion -ResourceGroupName $ResourceGroupName
 
-        It "Bastion should exist in Resource Group" {
+        It "Bastion should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             $Resources | ForEach-Object {
@@ -49,8 +49,7 @@ Describe "Azure Bastion" {
         # Get specific Bastion
         $Resource = Get-AzBastion -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        # Validate Bastion Tags
-        It "Bastion should have all Resource Tags" {
+        It "Bastion should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys

@@ -27,16 +27,16 @@ Describe "Azure Virtual Machine" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the VMs in the ResourceGroup
+        # Get all the VirtualMachines in the Resource Group
         $Resources = Get-AzVM -ResourceGroupName $ResourceGroupName | 
 
-        It "VM should exist in Resource Group" {
+        It "Virtual Machine should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             foreach ($Resource in $Resources) {
@@ -47,23 +47,22 @@ Describe "Azure Virtual Machine" {
             $ResourceFound | Should -Be $true
         }
         
-        # Get specific VM
+        # Get specific Virtual Machine
         $Resource = Get-AzVM -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "VM should be" {
-
+        It "Virtual Machine should be in the expected Location" {
+            $Resource.Location | Should -Be $ResourceLocation
         }
-
-        # Validate VM Tags
-
+    
+        It "Virtual Machine should have all the expected Resource Tags" {
+        }
     }
 
     Context "Resource Operation" {
-        # Get specific VM
+        # Get specific Virtual Machine
         $Resource = Get-AzVM -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        # Check VM is in the desired Provisioning State
-        It 'Should be in desired Provisioning State' {
+        It "Virtual Machine should be provisioned successfully" {
             $Resource.ProvisioningState | Should Be "Succeedded"
         }
     }

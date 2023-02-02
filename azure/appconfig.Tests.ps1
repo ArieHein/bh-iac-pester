@@ -26,16 +26,16 @@ Describe "Azure App Configuration" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the App Configurations in the ResourceGroup
+        # Get all the App Configurations in the Resource Group
         $Resources = Get-AzAppConfigurationStore -ResourceGroupName $ResourceGroupName
 
-        It "AppConfiguration should exist in Resource Group" {
+        It "App Configuration should exist in expected Resource Group" {
             $ResourceFound = $false
             $Resources | ForEach-Object {
                 if (_$.Name -eq $ResourceName) {
@@ -49,15 +49,15 @@ Describe "Azure App Configuration" {
         # Get specific App Configuration
         $Resource = Get-AzAppConfigurationStore -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "App Configuration in expected Location" {
+        It "App Configuration should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "App Configuration in expected SKU" {
+        It "App Configuration should be of the expected SKU" {
             $Resource.SKUName | Should -Be $ResourceSKU
         }
 
-        It "App Configuration should have all Resource Tags" {
+        It "App Configuration should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys
@@ -82,7 +82,7 @@ Describe "Azure App Configuration" {
         # Get specific App Configuration
         $Resource = Get-AzAppConfigurationStore -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "Resource Group should be provisioned successfully" {
+        It "App Configuration should be provisioned successfully" {
             $Resource.ProvisioningState | Should -Be "Succeeded"
         }
     }

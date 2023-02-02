@@ -28,7 +28,7 @@ Describe "Azure Storage Account" {
         $ResourceGroups = Get-AzResourceGroup
         foreach ($ResourceGroup in $ResourceGroups) {
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
@@ -37,7 +37,7 @@ Describe "Azure Storage Account" {
         # Get all the Storage Accouts in the Resource Group
         $Resources = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName
 
-        It "Storage Account should exist in the Resource Group" {
+        It "Storage Account should exist in the expected Resource Group" {
             $ResourceFound = $false
             $Resources | ForEach-Object {
                 if (_$.StorageAccountName -eq $ResourceName) {
@@ -51,31 +51,31 @@ Describe "Azure Storage Account" {
         # Get specific Storage Account
         $Resource = Get-AzStorageAccount -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "Storage Account should be in Location" {
+        It "Storage Account should be in the expected Location" {
             $Resource.PrimaryLocation | Should -Be $ResourceLocation
         }
 
-        It "Storage Account Should be of Tier" {
+        It "Storage Account should be of the expected Tier" {
             $Resource.SKU.Tier | Should -Be $ResourceTier
         }
 
-        It "Storage Account Should be of expected Replication" {
+        It "Storage Account should have the expected Replication setting" {
             $Resource.Replication | Should -Be $ResourceReplic
         }
 
-        It "Storage Account Should have expected Pubilc Access" {
+        It "Storage Account should have the expected Pubilc Access setting" {
             $Resource.AllowBlobPublicAccess | Should -Be $ResourcePublic
         }
 
-        It "Storage Account Should be of desired TLS" {
+        It "Storage Account should have the exepcted TLS setting" {
             $Resource.MinimumTlsVersion | Should -Be $ResourceTLS
         }
 
-        It "Storage Account Should be in desired HttpTrafic setting" {
+        It "Storage Account should have the expected HttpTrafic setting" {
             $Resource.EnableHttpsTrafficOnly | Should -Be $ResourceHTTPSOnly
         }
 
-        It "ResourceGroup should have all Resource Tags" {
+        It "Storage Account should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
 

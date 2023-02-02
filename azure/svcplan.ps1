@@ -31,16 +31,16 @@ Describe "Azure Service Plan" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all Service Plans in the ResourceGroup
+        # Get all Service Plans in the Resource Group
         $Resources = Get-AzAppServicePlan -ResourceGroupName $ResourceGroupName
 
-        It "Service Plan should exist in Resource Group" {
+        It "Service Plan should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             foreach ($Resource in $Resources) {
@@ -54,33 +54,31 @@ Describe "Azure Service Plan" {
         # Get specific Service Plan
         $Resource = Get-AzAppServicePlan -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        # Check Service Plan is in the desired location
-        It 'Service Plan should be in Location' {
+        It "Service Plan should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "Service Plan should have expected Kind" {
+        It "Service Plan should be of the expected Kind" {
             $Resource.Kind | Should -Be $ResourceKind
         }
 
-        It "Service Plan should have expected Tier" {
+        It "Service Plan should be of the expected Tier" {
             $Resource.Sku.Tier | Should -Be $ResourceTier
         }
 
-        It "Service Plan should have expected Size" {
+        It "Service Plan should be of the expected Size" {
             $Resource.Sku.Size | Should -Be $ResourceSize
         }
 
-        It "Service Plan should have expected Capacity" {
+        It "Service Plan should be of the expected Capacity" {
             $Resource.Sku.Capacity | Should -Be $ResourceCapacity
         }
 
-        It "Service Plan should have expected Number of Workers" {
+        It "ServicePlan should have the expected Number of Workers setting" {
             $Resource.MaximumNumberOfWorkers | Should -Be $ResourceWorkers
         }
 
-        # Validate Service Plan Tags
-        It "Service Plan should have all Resource Tags" {
+        It "Service Plan should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys
@@ -105,13 +103,11 @@ Describe "Azure Service Plan" {
         # Get specific Service Plan
         $Resource = Get-AzAppServicePlan -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        # Check status of Provisioning
-        It 'Service Plan Should have ProvisioningState Succeeded' {
+        It "Service Plan should be provisioned successfully" {
             $Resource.ProvisioningState | Should Be "Succeeded"
         }
 
-        # Check status of Plan
-        It 'Service Plan Should have Ready Status' {
+        It "Service Plan should be at expected state" {
             $Resource.Status | Should Be "Ready"
         }
     }

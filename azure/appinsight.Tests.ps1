@@ -28,16 +28,16 @@ Describe "Azure Application Insights" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all Application Insights in the ResourceGroup
+        # Get all the Application Insights in the Resource Group
         $Resources = Get-AzApplicationInsights -ResourceGroupName $ResourceGroupName
 
-        It "Application Insights should exist in Resource Group" {
+        It "Application Insights should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             $Resources | ForEach-Object {
@@ -49,22 +49,22 @@ Describe "Azure Application Insights" {
             $ResourceFound | Should -Be $true
         }
 
-        # Get specific Application Insight
+        # Get specific Application Insights
         $Resource = Get-AzApplicationInsights -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "Application Insights should be in expected Location" {
+        It "Application Insights should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "Application Insights should be of expected Kind" {
+        It "Application Insights should be of the expected Kind" {
             $Resource.Kind | Should -Be $ResourceKind
         }
 
-        It "Application Insights should be of expected type" {
+        It "Application Insights should be of the expected Type" {
             $Resource.WorkspaceResourceId | Should -Be $ResourceWKS
         }
 
-        It "Application Insights should have all Resource Tags" {
+        It "Application Insights should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys

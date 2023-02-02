@@ -26,16 +26,16 @@ Describe "Azure Container Registry" {
         foreach ($ResourceGroup in $ResourceGroups) {
 
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
-                # Error out with ResourceGroup Not Found.
+                # Error out with Resource Group Not Found.
             }
         }
     }
 
     Context "Resource Provision" {
-        # Get all the Container Registries in the ResourceGroup
+        # Get all the Container Registries in the Resource Group
         $Resources = Get-AzContainerRegistry -ResourceGroupName $ResourceGroupName
 
-        It "ACR should exist in Resource Group" {
+        It "Container Registry should exist in the expected Resource Group" {
             $ResourceFound = $false
             
             $Resources | ForEach-Object {
@@ -50,19 +50,19 @@ Describe "Azure Container Registry" {
         # Get specific Container Registry
         $Resource = Get-AzContainerRegistry -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "ACR should be in expected Location" {
+        It "Container Registry should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "ACR should have expected AdminEnabled setting" {
+        It "Container Registry should have the expected AdminEnabled setting" {
             $Resource.AdminUserEnabled | Should -Be $ResourceAdmin
         }
 
-        It "ACR should be of the expected SKU" {
+        It "Container Registry should be of the expected SKU" {
             $Resource.SkuName | Should -Be $ResourceSKU
         }
 
-        It "ACR should have all Resource Tags" {
+        It "Container Registry should have all the expected Resource Tags" {
             $ResourceFound = $false
             $Message = "Resource"
             $CompareKeys = Compare-Object -ReferenceObject $Resource.Tags.Keys -DifferenceObject $ResourceTags.Keys
@@ -87,12 +87,12 @@ Describe "Azure Container Registry" {
         # Get specific Container Registry
         $Resource = Get-AzContainerRegistry -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "ACR should be provisioned successfully" {
+        It "Container Registry should be provisioned successfully" {
             $Resource.ProvisioningState | Should -Be "Succeeded"
         }
     }
 
-        # test for curl on the registry URL. Potentially with checking Login if its enabled
+    # test for curl on the registry URL. Potentially with checking Login if its enabled
 
     AfterAll {
 
