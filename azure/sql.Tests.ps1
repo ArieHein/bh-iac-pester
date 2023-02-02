@@ -4,6 +4,7 @@ param (
     [Parameter(Mandatory)][string]$ResourceGroupName,
     [Parameter(Mandatory)][string]$ResourceLocation,
     [Parameter(Mandatory)][string]$ResourceVersion,
+    [Parameter(Mandatory)][bool]$ResourceCheckDB = $false,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
@@ -44,14 +45,14 @@ Describe "Azure SQL Server" {
                     $ResourceFound = $true
                 }
             }
-            $ResourceFound | Should -be $true
+            $ResourceFound | Should -Be $true
         }
 
         # Get specific SQLServer
         $Resource = Get-AzSqlServer -ServerName $ResourceName -ResourceGroupName $ResourceGroupName
 
         # Check SQLServer is in the desired location
-        It 'SQLServer should be in Location' {
+        It 'SQLServer should be in expected Location' {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
@@ -67,10 +68,17 @@ Describe "Azure SQL Server" {
         # Get specific SQLServer
         $Resource = Get-AzSqlServer -ServerName $ResourceName -ResourceGroupName $ResourceGroupName
 
-        # Check SQLServer is in desrired state
-        It 'Should have Running State' {
-            $Resource.Status | Should Be $SQLServerStatus
-        }
+        # Check SQLServer is active
+        # Since there is no way via powershell or the API to look at server status
+        # The way to implement a check is by actually connecting to the master db.
+        # Evaluate $ResourceCheckDB, which by default is false, but if you supply $true
+        # it should run a connection attempt to the fully qualified dns name of the sql server
+        # to the master db. There isnt even a need to run a query. One thing to think is how
+        # to connect from agent doing the tests, as it require adding IP to the SQL FW Rules
+        # can always try adding, testing and removing ot perhaps if it record this as
+        # an azure service and 0.0.0.0 already appears in the sql fw rules but ofc only if it comes
+        # from Azure DevOps.
+
     }
 
         # Think about adding test to actually connect to test connection string
