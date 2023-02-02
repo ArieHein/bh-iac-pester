@@ -40,9 +40,10 @@ Describe "Azure Application Insights" {
         It "Application Insights should exist in Resource Group" {
             $ResourceFound = $false
 
-            foreach ($Resource in $Resources) {
-                if ($Resource.Name -eq $ResourceName) {
+            $Resources | ForEach-Object {
+                if (_$.Name -eq $ResourceName) {
                     $ResourceFound = $true
+                    break
                 }
             }
             $ResourceFound | Should -Be $true
@@ -51,11 +52,11 @@ Describe "Azure Application Insights" {
         # Get specific Application Insight
         $Resource = Get-AzApplicationInsights -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "Application Insights should be in Location" {
+        It "Application Insights should be in expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
-        It "Application Insights should be of Kind" {
+        It "Application Insights should be of expected Kind" {
             $Resource.Kind | Should -Be $ResourceKind
         }
 
