@@ -3,6 +3,7 @@ param (
     [Parameter(Mandatory)][string]$ResourceName,
     [Parameter(Mandatory)][string]$ResourceGroupName,
     [Parameter(Mandatory)][string]$ResourceLocation,
+    [Parameter(Mandatory)][string]$ResourceSKU,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
