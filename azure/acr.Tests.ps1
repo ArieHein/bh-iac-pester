@@ -37,7 +37,7 @@ Describe "Azure Container Registry" {
 
         It "Container Registry should exist in the expected Resource Group" {
             $ResourceFound = $false
-            
+
             $Resources | ForEach-Object {
                 if (_$.RegistryName -eq $ResourceName) {
                     $ResourceFound = $true
