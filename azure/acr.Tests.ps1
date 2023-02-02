@@ -58,7 +58,7 @@ Describe "Azure Container Registry" {
             $Resource.AdminUserEnabled | Should -Be $ResourceAdmin
         }
 
-        It "ACR should be of the required SKU" {
+        It "ACR should be of the expected SKU" {
             $Resource.SkuName | Should -Be $ResourceSKU
         }
 
@@ -87,7 +87,7 @@ Describe "Azure Container Registry" {
         # Get specific Container Registry
         $Resource = Get-AzContainerRegistry -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "Resource Group should be provisioned successfully" {
+        It "ACR should be provisioned successfully" {
             $Resource.ProvisioningState | Should -Be "Succeeded"
         }
     }
