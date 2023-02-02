@@ -1,6 +1,7 @@
 param (
     [Parameter(Mandatory)][string]$SubscriptionName,
     [Parameter(Mandatory)][string]$ResourceName,
+    [Parameter(Mandatory)][string]$ResourceOSType,
     [Parameter(Mandatory)][string]$ResourceGroupName,
     [Parameter(Mandatory)][string]$ResourceLocation,
     [Parameter(Mandatory)][hashtable]$ResourceTags
@@ -32,8 +33,8 @@ Describe "Azure Virtual Machine" {
     }
 
     Context "Resource Provision" {
-        # Get all the Windoes VMs in the ResourceGroup
-        $Resources = Get-AzVM -ResourceGroupName $ResourceGroupName
+        # Get all the VMs in the ResourceGroup
+        $Resources = Get-AzVM -ResourceGroupName $ResourceGroupName | 
 
         It "VM should exist in Resource Group" {
             $ResourceFound = $false
@@ -46,7 +47,7 @@ Describe "Azure Virtual Machine" {
             $ResourceFound | Should -Be $true
         }
         
-        # Get specific Windows VM
+        # Get specific VM
         $Resource = Get-AzVM -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
         It "VM should be" {
@@ -58,7 +59,7 @@ Describe "Azure Virtual Machine" {
     }
 
     Context "Resource Operation" {
-        # Get specific Windows VM
+        # Get specific VM
         $Resource = Get-AzVM -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
         # Check VM is in the desired Provisioning State
