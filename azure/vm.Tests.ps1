@@ -33,7 +33,7 @@ Describe "Azure Virtual Machine" {
     }
 
     Context "Resource Provision" {
-        # Get all the VirtualMachines in the Resource Group
+        # Get all the Virtual Machines in the Resource Group
         $Resources = Get-AzVM -ResourceGroupName $ResourceGroupName | 
 
         It "Virtual Machine should exist in the expected Resource Group" {

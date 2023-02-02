@@ -37,7 +37,7 @@ Describe "Azure Service Plan" {
     }
 
     Context "Resource Provision" {
-        # Get all Service Plans in the Resource Group
+        # Get all the Service Plans in the Resource Group
         $Resources = Get-AzAppServicePlan -ResourceGroupName $ResourceGroupName
 
         It "Service Plan should exist in the expected Resource Group" {
