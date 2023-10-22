@@ -29,7 +29,6 @@ Describe "Azure Service Plan" {
         $ResourceGroups = Get-AzResourceGroup -Subscription $SubscriptionName
 
         foreach ($ResourceGroup in $ResourceGroups) {
-
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
                 # Error out with Resource Group Not Found.
             }
@@ -43,8 +42,8 @@ Describe "Azure Service Plan" {
         It "Service Plan should exist in the expected Resource Group" {
             $ResourceFound = $false
 
-            $Resources | ForEach-Object {
-                if (_$.Name -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }

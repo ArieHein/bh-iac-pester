@@ -36,8 +36,8 @@ Describe "Azure Logic Apps" {
         It "Logic App should exist in the expected Resource Group" {
             $ResourceFound = $false
 
-            $Resources | ForEach-Object {
-                if (_$.Name -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }

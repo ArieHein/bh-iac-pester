@@ -3,6 +3,10 @@ param (
     [Parameter(Mandatory)][string]$ResourceName,
     [Parameter(Mandatory)][string]$ResourceGroupName,
     [Parameter(Mandatory)][string]$ResourceLocation,
+    [Parameter(Mandatory)][string]$ResourceSKU,
+    [Parameter(Mandatory)][string]$ResourceScaleUnit,
+    [Parameter(Mandatory)][string]$ResourcePublicIP,
+    [Parameter(Mandatory)][string]$ResourceVNetName,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
@@ -23,7 +27,6 @@ Describe "Azure Bastion" {
         $ResourceGroups = Get-AzResourceGroup -Subscription $SubscriptionName
 
         foreach ($ResourceGroup in $ResourceGroups) {
-
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
                 # Error out with Resource Group Not Found.
             }
@@ -37,8 +40,8 @@ Describe "Azure Bastion" {
         It "Bastion should exist in the expected Resource Group" {
             $ResourceFound = $false
 
-            $Resources | ForEach-Object {
-                if (_$.Name -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }
@@ -48,6 +51,22 @@ Describe "Azure Bastion" {
 
         # Get specific Bastion
         $Resource = Get-AzBastion -Name $ResourceName -ResourceGroupName $ResourceGroupName
+
+        It "Basiton should be in the expected Location" {
+            $Resource.Location | Should -Be $ResourceLocation
+        }
+
+        It "Bastion should be of the expected SKU" {
+            $Resource.Sku | Should -Be $ResourceSKU
+        }
+
+        It "Bastion should be of the expected ScaleUnit" {
+            $Resource.ScaleUnit | Should -Be $ResourceScaleUnit
+        }
+
+        It "Bastion should be of the expected Public IP" {
+            $Resource.IPConfiguration.PublicIPAddress.Id | Should -Be $ResourcePublicIP
+        }
 
         It "Bastion should have all the expected Resource Tags" {
             $ResourceFound = $false

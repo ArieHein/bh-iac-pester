@@ -39,8 +39,8 @@ Describe "Azure Storage Account" {
 
         It "Storage Account should exist in the expected Resource Group" {
             $ResourceFound = $false
-            $Resources | ForEach-Object {
-                if (_$.StorageAccountName -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }

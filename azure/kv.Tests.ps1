@@ -36,8 +36,8 @@ Describe "Azure Key Vault" {
         It "Key Vault should exist in the Resource Group" {
             $ResourceFound = $false
 
-            $Resources | ForEach-Object {
-                if (_$.VaultName -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }

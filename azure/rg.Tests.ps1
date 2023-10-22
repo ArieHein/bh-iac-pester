@@ -31,8 +31,8 @@ Describe "Azure Resource Group" {
         It "Resource Group should exist in the expected Subscription" {
             $ResourceFound = $false
 
-            $Resources | ForEach-Object {
-                if (_$.ResourceGroupName -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }

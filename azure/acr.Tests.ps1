@@ -24,7 +24,6 @@ Describe "Azure Container Registry" {
         $ResourceGroups = Get-AzResourceGroup -Subscription $SubscriptionName
 
         foreach ($ResourceGroup in $ResourceGroups) {
-
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
                 # Error out with Resource Group Not Found.
             }
@@ -38,8 +37,8 @@ Describe "Azure Container Registry" {
         It "Container Registry should exist in the expected Resource Group" {
             $ResourceFound = $false
 
-            $Resources | ForEach-Object {
-                if (_$.RegistryName -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }
@@ -95,6 +94,5 @@ Describe "Azure Container Registry" {
     # test for curl on the registry URL. Potentially with checking Login if its enabled
 
     AfterAll {
-
     }
 }

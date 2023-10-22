@@ -38,8 +38,8 @@ Describe "Azure SQL Server" {
         It "SQL Server should exist in the expected Resource Group" {
             $ResourceFound = $false
 
-            $Resources | ForEach-Object {
-                if (_$.ServerName -eq $ResourceName) {
+            foreach ($Resource in $Resources) {
+                if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
                     break
                 }
