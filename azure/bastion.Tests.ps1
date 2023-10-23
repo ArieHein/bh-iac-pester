@@ -11,7 +11,6 @@ param (
 )
 
 Describe "Azure Bastion" {
-
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {
@@ -52,7 +51,7 @@ Describe "Azure Bastion" {
         # Get specific Bastion
         $Resource = Get-AzBastion -Name $ResourceName -ResourceGroupName $ResourceGroupName
 
-        It "Basiton should be in the expected Location" {
+        It "Bastion should be in the expected Location" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
