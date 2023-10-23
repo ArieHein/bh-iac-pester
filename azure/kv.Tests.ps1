@@ -33,7 +33,7 @@ Describe "Azure Key Vault" {
         # Get all the Key Vaults in the Resource Group
         $Resources = Get-AzKeyVault -ResourceGroupName $ResourceGroupName
 
-        It "Key Vault should exist in the Resource Group" {
+        It "Key Vault should exist in the expected Resource Group" {
             $ResourceFound = $false
 
             foreach ($Resource in $Resources) {
