@@ -10,11 +10,9 @@ param (
 )
 
 Describe "Azure FunctionApp Plan" {
-
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {
-
             if ($Subscription.SubscriptionName -eq $SubscriptionName) {
                 Set-AzContext -Subscription $SubscriptionName
             }

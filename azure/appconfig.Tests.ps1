@@ -8,7 +8,6 @@ param (
 )
 
 Describe "Azure App Configuration" {
-
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {

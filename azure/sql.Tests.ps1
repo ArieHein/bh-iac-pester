@@ -9,7 +9,6 @@ param (
 )
 
 Describe "Azure SQL Server" {
-
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {
