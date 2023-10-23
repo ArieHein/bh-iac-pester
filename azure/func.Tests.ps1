@@ -8,7 +8,6 @@ param (
 )
 
 Describe "Azure Function App" {
-
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {
@@ -48,6 +47,10 @@ Describe "Azure Function App" {
 
         # Get specific Function App
         $Resource = Get-AzFunctionApp -Name $ResourceName -ResourceGroupName $ResourceGroupName
+
+        It "Function App should be in the expected Location" {
+            $Resource.Location | Should -Be $ResourceLocation
+        }
 
         It "Function App should have all the expected Resource Tags" {
         }

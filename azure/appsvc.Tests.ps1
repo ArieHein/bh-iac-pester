@@ -12,7 +12,6 @@ param (
 )
 
 Describe "Azure App Service" {
-
     BeforeAll {
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {
@@ -52,6 +51,10 @@ Describe "Azure App Service" {
 
         # Get specific App Service
         $Resource = Get-AzAppService -Name $ResourceName -ResourceGroupName $ResourceGroupName
+
+        It "App Service should be in the expected Location" {
+            $Resource.Location | Should -Be $ResourceLocation
+        }
 
         It "App Service should be of the expected Kind" {
             $Resource.Kind | Should -Be $ResourceKind
