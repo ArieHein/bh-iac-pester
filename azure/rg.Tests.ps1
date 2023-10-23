@@ -6,20 +6,23 @@ param (
 )
 
 Describe "Azure Resource Group" {
-
     BeforeAll {
-        # Get all Subscriptions in the connection context, to be sure all commands
-        # are executed in the correct Subscription.
         $Subscriptions = Get-AzContext -ListAvailable
-
-        $Subscriptions | ForEach-Object {
-            if (_$.SubscriptionName -eq $SubscriptionName) {
+        foreach ($Subscription in $Subscriptions) {
+            if ($Subscription.SubscriptionName -eq $SubscriptionName) {
                 Set-AzContext -Subscription $SubscriptionName
-                break
             }
             else {
-                # Error out with Subscription Not Found. Note that by default only 25
-                # Subscriptions will show up. Use Connect-AzAccount -MaxContextPopulation <int> to get more context
+                # Error out with Subscription Not Found. Note that by default only 25 Subscriptions
+                # will show up. Use Connect-AzAccount -MaxContextPopulation <int> to get more context
+            }
+        }
+
+        $ResourceGroups = Get-AzResourceGroup -Subscription $SubscriptionName
+
+        foreach ($ResourceGroup in $ResourceGroups) {
+            if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
+                # Error out with Resource Group Not Found.
             }
         }
     }
