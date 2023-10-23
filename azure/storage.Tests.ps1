@@ -11,21 +11,20 @@ param (
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 Describe "Azure Storage Account" {
-
     BeforeAll {
-        # Get all Subscriptions in the connection context, to be sure all commands
-        # are executed in the correct Subscription.
         $Subscriptions = Get-AzContext -ListAvailable
         foreach ($Subscription in $Subscriptions) {
             if ($Subscription.SubscriptionName -eq $SubscriptionName) {
                 Set-AzContext -Subscription $SubscriptionName
             }
             else {
-                # Error out with Subscription Not Found. Note that by default only 25
-                # Subscriptions will show up. Use Connect-AzAccount -MaxContextPopulation <int> to get more context
+                # Error out with Subscription Not Found. Note that by default only 25 Subscriptions
+                # will show up. Use Connect-AzAccount -MaxContextPopulation <int> to get more context
             }
         }
-        $ResourceGroups = Get-AzResourceGroup
+
+        $ResourceGroups = Get-AzResourceGroup -Subscription $SubscriptionName
+
         foreach ($ResourceGroup in $ResourceGroups) {
             if ( -not ($ResourceGroup.Name -eq $ResourceGroupName)) {
                 # Error out with Resource Group Not Found.
@@ -39,6 +38,7 @@ Describe "Azure Storage Account" {
 
         It "Storage Account should exist in the expected Resource Group" {
             $ResourceFound = $false
+
             foreach ($Resource in $Resources) {
                 if ($Resource.Name -eq $ResourceName) {
                     $ResourceFound = $true
