@@ -5,6 +5,8 @@ param (
     [Parameter(Mandatory)][string]$ResourceLocation,
     [Parameter(Mandatory)][bool]$ResourceAdmin,
     [Parameter(Mandatory)][string]$ResourceSKU,
+    [Parameter(Mandatory=$false)][bool]$ResourceEncryption,
+    [Parameter(Mandatory=$false)][bool]$ResourcePublicNetworkAccess,
     [Parameter(Mandatory)][hashtable]$ResourceTags
 )
 
@@ -53,12 +55,20 @@ Describe "Azure Container Registry" {
             $Resource.Location | Should -Be $ResourceLocation
         }
 
+        It "Container Registry should be of the expected SKU" {
+            $Resource.SkuName | Should -Be $ResourceSKU
+        }
+
         It "Container Registry should have the expected AdminEnabled setting" {
             $Resource.AdminUserEnabled | Should -Be $ResourceAdmin
         }
 
-        It "Container Registry should be of the expected SKU" {
-            $Resource.SkuName | Should -Be $ResourceSKU
+        It "Container Registry should have the expected Encryption setting" {
+            $Resource.EncryptionStatus | Should -Be $ResourceEncryption
+        }
+
+        It "Container Registry should have the expected PublicNetworkAccess setting" {
+            $Resource.PublicNetworkAccess | Should -Be $ResourcePublicNetworkAccess
         }
 
         It "Container Registry should have all the expected Resource Tags" {
